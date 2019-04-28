@@ -23,10 +23,6 @@ Parameters:
     Type: String
     Default: true
 Conditions:
-  IsGovCloud:
-    !Equals
-    - us-gov-west-1
-    - !Ref AWS::Region
   SupportsGlacier:
     !Equals
     - true
@@ -70,12 +66,7 @@ Resources:
           Principal: '*'
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rArchiveLogsBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rArchiveLogsBucket}/*
           Condition:
             Bool:
               aws:SecureTransport: false
@@ -85,24 +76,14 @@ Resources:
           Principal: '*'
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rArchiveLogsBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rArchiveLogsBucket}/*
         - Sid: DenyUnEncryptedObjectUploads
           Effect: Deny
           Principal: '*'
           Action: s3:PutObject
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rArchiveLogsBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rArchiveLogsBucket}/*
           Condition:
             StringNotEquals:
               s3:x-amz-server-side-encryption: AES256
@@ -130,12 +111,7 @@ Resources:
           Action: s3:GetBucketAcl
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rCloudTrailBucket}
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}
         - Sid: AWSCloudTrailWrite20150319
           Effect: Allow
           Principal:
@@ -143,12 +119,7 @@ Resources:
           Action: s3:PutObject
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rCloudTrailBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}/*
           Condition:
             StringEquals:
               s3:x-amz-acl: bucket-owner-full-control
@@ -158,12 +129,7 @@ Resources:
           Principal: '*'
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rCloudTrailBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}/*
           Condition:
             Bool:
               aws:SecureTransport: false
@@ -173,24 +139,14 @@ Resources:
           Principal: '*'
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rCloudTrailBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}/*
         - Sid: DenyUnEncryptedObjectUploads
           Effect: Deny
           Principal: '*'
           Action: s3:PutObject
           Resource:
             !Sub
-            - arn:${Partition}:s3:::${rCloudTrailBucket}/*
-            - Partition:
-                !If
-                - IsGovCloud
-                - aws-us-gov
-                - aws
+            - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}/*
           Condition:
             StringNotEquals:
               s3:x-amz-server-side-encryption: AES256
@@ -233,24 +189,14 @@ Resources:
             - logs:CreateLogStream
             Resource:
               !Sub
-              - arn:${Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${rCloudTrailLogGroup}:log-stream:*
-              - Partition:
-                  !If
-                  - IsGovCloud
-                  - aws-us-gov
-                  - aws
+              - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${rCloudTrailLogGroup}:log-stream:*
           - Sid: AWSCloudTrailPutLogEvents20141101
             Effect: Allow
             Action:
             - logs:PutLogEvents
             Resource:
               !Sub
-              - arn:${Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${rCloudTrailLogGroup}:log-stream:*
-              - Partition:
-                  !If
-                  - IsGovCloud
-                  - aws-us-gov
-                  - aws
+              - arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:${rCloudTrailLogGroup}:log-stream:*
   rCloudTrailRole:
     Type: AWS::IAM::Role
     Properties:
@@ -273,24 +219,14 @@ Resources:
             - s3:ListBucket
             Resource:
               !Sub
-              - arn:${Partition}:s3:::${rCloudTrailBucket}
-              - Partition:
-                  !If
-                  - IsGovCloud
-                  - aws-us-gov
-                  - aws
+              - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}
           - Effect: Allow
             Action:
             - s3:PutObject
             - s3:GetObject
             Resource:
               !Sub
-              - arn:${Partition}:s3:::${rCloudTrailBucket}/*
-              - Partition:
-                  !If
-                  - IsGovCloud
-                  - aws-us-gov
-                  - aws
+              - arn:${AWS::Partition}:s3:::${rCloudTrailBucket}/*
   rCloudTrailProfile:
     Type: AWS::IAM::InstanceProfile
     DependsOn: rCloudTrailRole
