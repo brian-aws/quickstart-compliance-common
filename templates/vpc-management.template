@@ -204,8 +204,8 @@ Parameters:
 Conditions:
   cGovCloudCondition:
     !Equals
-    - !Ref AWS::Region
-    - us-gov-west-1
+    - !Ref AWS::Partition
+    - aws-us-gov
   cCreateBastionHost:
     !Equals
     - true
@@ -249,12 +249,12 @@ Resources:
     Properties:
       TemplateURL:
         !Sub
-        - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-compliance-common/templates/nat-instance.template
-        - QSS3Region:
+        - https://s3${QSS3Endpoint}${AWS::Region}.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/quickstart-compliance-common/templates/nat-instance.template
+        - QSS3Endpoint:
             !If
-            - cGovCloudCondition
-            - s3-us-gov-west-1
-            - s3
+            - GovCloudCondition
+            - '-'
+            - '.'
       TimeoutInMinutes: 20
       Parameters:
         pDMZSubnetA: !Ref rManagementDMZSubnetA
