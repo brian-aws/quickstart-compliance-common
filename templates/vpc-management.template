@@ -252,7 +252,7 @@ Resources:
         - https://s3${QSS3Endpoint}${AWS::Region}.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/quickstart-compliance-common/templates/nat-instance.template
         - QSS3Endpoint:
             !If
-            - GovCloudCondition
+            - cGovCloudCondition
             - '-'
             - '.'
       TimeoutInMinutes: 20
